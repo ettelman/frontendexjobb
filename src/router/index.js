@@ -1,25 +1,61 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+/* eslint-disable */
+import { createRouter, createWebHistory } from 'vue-router';
+import TwoFactorLogin from '../views/TwoFactorLogin.vue';
+import FrejaEidLogin from '../views/FrejaEidLogin.vue';
+import RegisterTwo from '../views/RegisterTwo.vue';
+import SecretView from '../views/SecretView.vue';
+import ResetView from '../views/ResetView.vue';
+import axios from 'axios';
 
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: HomeView
+    name: 'TwoFactorLogin',
+    component: TwoFactorLogin,
   },
   {
-    path: '/about',
-    name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
-  }
-]
+    path: '/freja-eid-login',
+    name: 'FrejaEidLogin',
+    component: FrejaEidLogin,
+  },{
+    path: '/registertwo',
+    name: 'RegisterTwo',
+    component: RegisterTwo,
+  },{
+    path: '/secret',
+    name: 'SecretView',
+    component: SecretView, meta: { requiresAuth: true }
+  },
+  {
+    path: '/reset',
+    name: 'ResetView',
+    component: ResetView,
+  },
+];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
-  routes
-})
+  routes,
+});
 
-export default router
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    axios.get("/authenticate")
+      .then(() => {
+        // If the request is successful, then the user is authenticated
+        next();
+      })
+      .catch(() => {
+        // If the request fails, then the user is not authenticated
+        next({
+          name: "TwoFactorLogin", 
+          // Save the location we were at to come back later, not really used but can be usefull
+          query: { redirect: to.fullPath },
+        });
+      });
+  } else {
+    next(); // Does not require login proceed to route
+  }
+});
+
+export default router;
