@@ -64,6 +64,8 @@ export default {
         } else {
           // The reponse wasnt successful. Sending error to user
           this.message = "Fel vid inloggning, svar från freja: " + response.data.status;
+          this.isLoading = false;
+          this.isSuccess = false;
         }
       } catch (error) {
         // Credentials were wrong

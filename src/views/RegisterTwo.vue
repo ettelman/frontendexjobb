@@ -30,6 +30,10 @@
       <div class="flex">
       Är du redan registrerad? <router-link class="solo-link" to="/">Logga in</router-link>
     </div>
+    <div class="infobox">
+        <p>När du registrerar dig lagras din e-postadress i vår databas. Genom att skapa en ny användare accepterar du detta. <br />
+        När du loggar in sparas din epostadress i en kaka för att hålla dig inloggad på servern</p>
+      </div>
     </div>
   </template>
   
@@ -114,12 +118,18 @@
   <style scoped>
   .strong {
   color: #0f9d58;
+  background-color: black;
+  padding: 0.2rem;
 }
 .medium {
   color: #f4b400;
+  background-color: black;
+  padding: 0.2rem;
 }
 .weak {
   color: #db4437;
+  background-color: black;
+  padding: 0.2rem;
 }
   .error-message {
     color: red;

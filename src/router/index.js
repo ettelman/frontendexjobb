@@ -49,7 +49,6 @@ router.beforeEach((to, from, next) => {
         // If the request fails, then the user is not authenticated
         next({
           name: "TwoFactorLogin", 
-          // Save the location we were at to come back later, not really used but can be usefull
           query: { redirect: to.fullPath },
         });
       });

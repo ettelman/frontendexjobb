@@ -1,7 +1,11 @@
 <template>
   <button @click="skipTwoFactor">Skippa tvåstegsinloggning</button>
   <h1>Registrera tvåstegsinloggning</h1>
-  <div class="twofactor">   
+  <div class="twofactor">
+    <div class="infobox">
+        <p>För att registrera tvåstegsinloggning behöver du en authenticator app. Det finns många att välja mellan på både android eller iphone appstore. Sök på "Authenticator" <br>
+        Om du vill ha en authenticator i din webbläsare kan du använda <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en&gl=US" class="solo-link">Google Authenticator</a></p>
+      </div>   
     <form v-if="!qrCodeImageUrl" @submit.prevent="setupTwoFactor">
       <div>
         <label for="email">Epostadress:</label>
@@ -16,6 +20,7 @@
     <img v-if="qrCodeImageUrl" :src="qrCodeImageUrl" alt="QR Code" />
     <form v-if="qrCodeImageUrl" @submit.prevent="verifyTwoFactor">
       <div>
+        <h2>Verifiera tvåstegsinloggning (frivilligt)</h2>
         <label for="passw">Engångslösenord</label>
         <input type="text" id="passw" v-model="token" />
       </div>
