@@ -1,11 +1,11 @@
 <template>
   <h1 class="top-h">Registrera ny användare</h1>
     <div class="login">
-      <div class="infobox">
+      <form @submit.prevent="register" v-if="!showTwoFactorSetup">
+        <div class="infobox">
         <p>Din epost måste vara i formatet namn@domän.se <br>
         Ditt lösenord måste vara minst 6 tecken långt.<br />Alla fält är obligatoriska</p>
       </div>
-      <form @submit.prevent="register" v-if="!showTwoFactorSetup">
         <div>
           <label for="email">Epostadress:</label>
       <input type="email" id="email" v-model="email" @blur="validateEmail"/>
@@ -24,7 +24,7 @@
       <button type="submit">Registrera</button>
      
     </form>
-    <two-factor-setup v-else :email="this.email" />
+    <two-factor-setup v-else :sentEmail="email" :sentPassword="password"/>
       <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
       <div v-if="successMessage" class="success-message">{{ successMessage }}</div>
       <div class="flex">
@@ -168,5 +168,8 @@ button {
 }
 .top-margin {
  margin-top: 2rem;
+}
+.infobox {
+  margin-top: 0.5rem;
 }
   </style>

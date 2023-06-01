@@ -2,11 +2,12 @@
   <button @click="skipTwoFactor">Skippa tvåstegsinloggning</button>
   <h1>Registrera tvåstegsinloggning</h1>
   <div class="twofactor">
-    <div class="infobox">
+    
+    <form v-if="!qrCodeImageUrl" @submit.prevent="setupTwoFactor">
+      <div class="infobox">
         <p>För att registrera tvåstegsinloggning behöver du en authenticator app. Det finns många att välja mellan på både android eller iphone appstore. Sök på "Authenticator" <br>
         Om du vill ha en authenticator i din webbläsare kan du använda <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en&gl=US" class="solo-link">Google Authenticator</a></p>
       </div>   
-    <form v-if="!qrCodeImageUrl" @submit.prevent="setupTwoFactor">
       <div>
         <label for="email">Epostadress:</label>
         <input type="email" id="email" v-model="email" />
@@ -17,8 +18,12 @@
       </div>
       <button>Initiera tvåstegsinloggning</button>
     </form>
-    <img v-if="qrCodeImageUrl" :src="qrCodeImageUrl" alt="QR Code" />
+    <div v-if="qrCodeImageUrl" class="infobox">
+        <p>Skanna QR-koden med din authenticator applikation</p>
+      </div> 
+    <img v-if="qrCodeImageUrl" :src="qrCodeImageUrl" alt="QR-kod" />
     <form v-if="qrCodeImageUrl" @submit.prevent="verifyTwoFactor">
+      
       <div>
         <h2>Verifiera tvåstegsinloggning (frivilligt)</h2>
         <label for="passw">Engångslösenord</label>
@@ -36,13 +41,22 @@ import axios from "axios";
 export default {
   data() {
     return {
-      email: "",
-      password: "",
+      email: this.sentEmail,
+      password: this.sentPassword,
       qrCodeImageUrl: "",
       token: "",
       error: "",
     };
   },
+  props: {
+    sentEmail: {
+      type: String, 
+      required: false,
+    },
+    sentPassword: {
+      type: String, 
+      required: false,
+    } },
   methods: {
     // using setup route to setup twofactor. The response includes a qrCodeImageUrl
     async setupTwoFactor() {
